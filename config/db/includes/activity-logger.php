@@ -23,6 +23,10 @@ function logActivity($pdo,$user_id,$user_email,$action, $status='success'){
         activity_log_user_agent
         ) VALUES (?,?,?,?,?,?)
         ");
+        
+        //Execute the INSERT
+        $success = $stmt->execute([$user_id, $user_email, $action, $status, $ip, $user_agent]);
+        return $success;
 
         catch (PDOException $e) {
             error_log("Activity Log Error:" . $e->getMessage());
@@ -30,6 +34,14 @@ function logActivity($pdo,$user_id,$user_email,$action, $status='success'){
         }
 
 
+    }
+
+     $success = logActivity($pdo, $user_id, $user_email, 'activity_logger_check', 'success');
+
+    if (success) {
+        echo "Activity log inserted successfully.";
+    } else {
+        echo "Failed to insert activity log.";
     }
 }
 ?>
