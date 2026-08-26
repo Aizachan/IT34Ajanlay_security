@@ -1,14 +1,14 @@
-CREATE TABLE IF NOT EXISTS activity_logs (
+CREATE TABLE IF NOT EXISTS activity_logs(
     activity_log_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(255) ,
+    user_id VARCHAR(255),
     user_email VARCHAR(255),
-    activity_log_action VARCHAR(50) not null,
-    activity_log_status ENUM('success', 'failed') DEFAULT 'success',
+    activity_log_action VARCHAR(50) NOT NULL,
+    activity_log_status ENUM('success', 'failed') DEFAULT 'SUCCESS',
 
-    -- CLIENT PARAMITERS
+    -- Client Parameters
     activity_log_ip_address VARCHAR(45),
     activity_log_user_agent VARCHAR(255),
 
-    -- TIMESTAMP
+    -- Timestamp
     activity_log_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
