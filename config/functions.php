@@ -2,59 +2,64 @@
 
 function redirect($path)
 {
-    header("Location: " . BASE_URL . $path);
+    header("Location: " . BASE_URL . ltrim($path, '/'));
     exit;
 }
-    
-      function rediect($path){
-        // Application query #2 
-        Sql = "
+
+function loginUser($pdo, $login, $password)
+{
+    // Application query #2
+    $sql = "
         SELECT
-             user_id,
-             user_email,
-             user_username,
-             user_password,
-             user_role,
-             FROM users
-             WHERE user_email = :login
-             or user_username = :login
-             LIMIT 1
-        ";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['login' => $login]);
+            user_id,
+            user_email,
+            user_username,
+            user_password,
+            user_role
+        FROM users
+        WHERE user_email = :login
+           OR user_username = :login
+        LIMIT 1
+    ";
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['login' => $login]);
 
-        $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if(user){
-            return false;
-        }
+    // If user is not found, authentication fails
+    if (!$user) {
+        return false;
+    }
 
-        if(password_verify($password, $user['user_password'])){
-            return false;
-        }
-         //session variables
-         $_SESSION['user_id'] = $user['user_id'];
-         $_SESSION['user_email'] = $user['user_email'];
-         $_SESSION['user_username'] = $user['user_username'];
-         $_SESSION['user_role'] = $user['user_role'];
+    // Verify hashed password
+    if (!password_verify($password, $user['user_password'])) {
+        return false;
+    }
 
-         return true;
-      }
-      function requireLogin()
-      {
-          if (!isset($_SESSION['user_id'])) {
-              header("Location: " . BASE_URL . "index.php");
-              exit;
-          }
+    // Set session variables upon successful login
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['user_email'] = $user['user_email'];
+    $_SESSION['user_username'] = $user['user_username'];
+    $_SESSION['user_role'] = $user['user_role'];
 
-          function requireRole($role)
-          {
-              requireLogin();
-              if ($_SESSION['user_role']) !== $role) {
-                  http_response_code(403);
-                  die("Access denied");
-              }
-          }
-      }
+    return true;
+}
 
+function requireLogin()
+{
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: " . BASE_URL . "index.php");
+        exit;
+    }
+}
+
+function requireRole($role)
+{
+    requireLogin();
+    if ($_SESSION['user_role'] !== $role) {
+        http_response_code(403);
+        die("Access denied");
+    }
+}
 ?>
