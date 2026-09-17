@@ -52,29 +52,24 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <title>Login</title>
 </head>
 <body>
+    <h1>User Login</h1>
+
     <?php if ($error): ?>
-    <p><?=htmlspecialchars($error) ?></p>
+        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 
-    
-    <h1>User Login</h1>
     <form method="POST">
-        <label> Username or Email</label>
-        <input type="text"
-               name="login"
-               required
-        >
-        <br>
+        <label>Username or email</label>
+        <input type="text" name="login" required>
+
+        <br><br>
+
         <label>Password</label>
-        <input type="password"
-               name="password"
-               required
-        >
-        <br>
+        <input type="password" name="password" required>
+
+        <br><br>
+
         <button type="submit">Sign In</button>
     </form>
 </body>
 </html>
-
-
-
