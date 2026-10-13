@@ -1,6 +1,6 @@
 <?php
 require 'config/config.php';
-require 'config/functions.php';
+
 
 if(isset($_SESSION['user_id'])){
     header('Location: ' . BASE_URL . '/app/' . $_SESSION['user_role'] . '/index.php');
@@ -35,7 +35,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         );
         header('Location: ' . BASE_URL . '/app/' . $_SESSION['user_role'] . '/index.php');
         exit;
-        
     }
     }
 }
@@ -75,6 +74,3 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     </form>
 </body>
 </html>
-
-
-
