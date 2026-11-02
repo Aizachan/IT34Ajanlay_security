@@ -1,5 +1,8 @@
+
 <?php
 require '../../config/config.php';
+
+requireRole('manager');
 ?>
 
 <!DOCTYPE html>

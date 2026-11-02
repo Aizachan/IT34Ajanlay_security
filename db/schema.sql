@@ -42,3 +42,24 @@ CREATE TABLE IF NOT EXISTS users (
 ALTER TABLE users
 ADD COLUMN user_username VARCHAR(100) UNIQUE NOT NULL
 AFTER user_email;
+
+INSERT INTO users
+(
+    user_email,
+    user_username,
+    user_password,
+    user_role
+)
+VALUES
+(
+    'manager@example.com',
+    'manager',
+    '$2y$10$HNfhClczEWBxcFuJwP53iu2Y75Tba7IEtmX8vX.1tp0dZ5EVt9CbO',
+    'manager'
+),
+(
+    'user@example.com',
+    'user',
+    '$2y$10$HNfhClczEWBxcFuJwP53iu2Y75Tba7IEtmX8vX.1tp0dZ5EVt9CbO',
+    'user'
+);
