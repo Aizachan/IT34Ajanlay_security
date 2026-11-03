@@ -9,41 +9,53 @@ if(isset($_SESSION['user_id'])){
 
 $error = '';
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+requireCsrfToken();
+
     $login = trim($_POST['login'] ?? '');
     $password = $_POST['password'] ?? '';
-   
 
-    if($login==='' || $password===''){
-         $error = 'Invalid login credentials';
-         logActivity(
+    if ($login === '' || $password === '') {
+
+        $error = 'Invalid login credentials';
+
+        logActivity(
             $pdo,
             null,
             $login,
             'login',
             'failed'
-         );
-    }else{
-    
-    $result = loginUser($pdo,$login,$password);
-    if($result === 'true'){
-        logActivity(
-            $pdo,
-            $_SESSION['user_id'],
-            $_SESSION['user_email'],
-            'login',
-            'success'
         );
-        header('Location: ' . BASE_URL . '/app/' . $_SESSION['user_role'] . '/index.php');
-        exit;
 
-    }elseif($result === 'active_session'){
-        $error = 'this account is already logged in on another device.';
-    } else{
-        $error = 'Invalid login credentials';
-    }
+    } else {
+
+        $result = loginUser($pdo, $login, $password);
+
+        if ($result === true) {
+
+            logActivity(
+                $pdo,
+                $_SESSION['user_id'],
+                $_SESSION['user_email'],
+                'login',
+                'success'
+            );
+
+            header('Location: ' . BASE_URL . '/app/' . $_SESSION['user_role'] . '/index.php');
+            exit;
+
+        } elseif ($result === 'active_session') {
+
+            $error = 'This account is already logged in on another device.';
+
+        } else {
+
+            $error = 'Invalid login credentials';
+        }
     }
 }
+
 
 ?>
 
@@ -63,6 +75,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <?php endif; ?>
 
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generateCSRFToken()) ?>">
         <label>Username or email</label>
         <input type="text" name="login" required>
 
